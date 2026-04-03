@@ -55,3 +55,44 @@
     line-height: 1.6;
     margin-bottom: 1.5rem;
 }
+
+.footer-section ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.75rem;
+}
+.footer-section ul li a,
+.footer-section ul li a:visited {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding: 0.25rem 0.25rem;
+}
+
+.footer-section ul li a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-section ul li a:hover {
+    color: var(--primary-light);
+    transform: translateY(4px);
+}
+
+.footer-section ul li a:hover::after {
+    width: 100%;
+}
