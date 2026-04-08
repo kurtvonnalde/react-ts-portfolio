@@ -1,8 +1,22 @@
 import { Link } from "react-router-dom";
 import AuthButtons from "../app/auth/AuthButtons";
 import "./Header.css"
+import { useEffect } from "react";
+
+
 
 export default function Header() {
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+
+    if  (url.searchParams.has("token")){
+      url.searchParams.delete("token");
+      window.location.replace(url.toString());
+    }
+
+  }, []);
+
   return (
     <header className="header">
         <div className='header-container'>
