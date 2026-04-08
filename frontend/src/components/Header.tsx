@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import AuthButtons from "../app/auth/AuthButtons";
 import "./Header.css"
 
 export default function Header() {
@@ -12,6 +13,7 @@ export default function Header() {
                 <Link to="/">Home</Link>
                 <Link to="/about">About me</Link>
                 <Link to="/contact">Contact</Link>
+                <AuthButtons />
              </nav>
         </div>
     </header>
