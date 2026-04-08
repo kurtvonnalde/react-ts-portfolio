@@ -1,15 +1,16 @@
 
 
 export function loginWithGoogle(){
-    window.location.assign("/.auth/login/google")
+    window.location.assign("/.auth/login/google?post_login_redirect_uri=/")
 }
 export function logout(){
-    window.location.assign("/.auth/logout")
+    window.location.assign("/.auth/logout?post_logout_redirect_uri=/")
 }
 
 export async function getUser(){
     const res = await fetch("/.auth/me", {
         credentials: "include",
+        cache: "no-cache",
     });
     if(!res.ok) return null;
 
