@@ -1,1 +1,0 @@
-{"routes":[],"auth":{"rolesSource":"/api/getRoles/api/getRoles","identityProviders":{"google":{"registration":{"clientIdSettingName":"GOOGLE_CLIENT_ID","clientSecretSettingName":"GOOGLE_CLIENT_SECRET_APP_SETTING_NAME"}}}}}
