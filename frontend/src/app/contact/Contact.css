@@ -1,0 +1,17 @@
+.contact {
+    min-height: calc(100vh - 5rem); /* account for sticky header (adjust if needed) */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #282c34;
+    color: #ffffff;
+    padding-top: 5rem; /* avoid content under the sticky header */
+    box-sizing: border-box;
+}
+
+.page-container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

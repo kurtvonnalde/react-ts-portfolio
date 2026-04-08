@@ -10,7 +10,7 @@ export default function Header() {
             </div>
              <nav className={`header-nav`}>
                 <Link to="/">Home</Link>
-                <Link to="/about">About</Link>
+                <Link to="/about">About me</Link>
                 <Link to="/contact">Contact</Link>
              </nav>
         </div>

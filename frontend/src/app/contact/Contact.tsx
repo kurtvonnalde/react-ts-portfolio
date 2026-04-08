@@ -1,7 +1,11 @@
+
+import { ComingSoon } from "../../components/ComingSoon/page";
+import "./Contact.css"
+
 export default function Contact() {
   return (
-    <div>
-      <h1>This is the Contact page</h1>
+    <div className="contact page-container">
+        <ComingSoon><h1>Contact Page</h1></ComingSoon>
     </div>
   );
 }
