@@ -9,7 +9,6 @@ export function logout(){
 
 export async function getUser(){
     const res = await fetch("/.auth/me", {
-        method: "GET",
         credentials: "include",
         cache: "no-store",
     });
@@ -17,5 +16,15 @@ export async function getUser(){
 
     const data = await res.json();
 
-    return data?.[0]?.clientPrincipal ?? null;
+    if (!Array.isArray(data) || data.length === 0) return null;
+
+    const auth = data[0];
+
+    return{
+        userId: auth.user_id,
+        provider: auth.provider_name,
+        claims: auth.user_claims,
+        email: auth.user_claims.find((c: any) => c.typ === "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.val ?? null,
+        name: auth.user_claims.find((c: any) => c.typ === "name")?.val ?? null,
+    };
 }

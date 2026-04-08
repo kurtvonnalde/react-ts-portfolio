@@ -1,12 +1,13 @@
 // src/components/AuthButtons.tsx
 import { useEffect, useState } from "react";
-import { loginWithGoogle, logout, getUser } from "./auth";
+import { getUser } from "./auth";
 
 type ClientPrincipal = {
-  identityProvider: string;
-  userId: string;
-  userDetails: string; // usually email
-  claims: { typ: string; val: string }[];
+  userId: any;
+  provider: any;
+  claims: any;
+  email: any;
+  name: any;
 };
 
 export default function AuthButtons() {
@@ -14,12 +15,10 @@ export default function AuthButtons() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadUser() {
-      const principal = await getUser();
-      setUser(principal);
+    getUser().then(u => {
+      setUser(u);
       setLoading(false);
-    }
-    loadUser();
+    });
   }, []);
 
   if (loading){
@@ -28,15 +27,15 @@ export default function AuthButtons() {
 
   if (!user) {
     return (
-      <button onClick={loginWithGoogle}>
+      <button onClick={() => window.location.assign("/.auth/login/google?post_login_redirect_uri=/")}>
         Sign In with Google
       </button>
     );
   }
   return (
    <div style={{display: "flex", gap: 12, alignItems: "center"}}>
-    <span>Signed in as <b>{user.userDetails}</b></span>
-    <button onClick={logout}>
+    <span>Signed in as <b>{user.email}</b></span>
+    <button onClick={() => window.location.assign("/.auth/logout?post_logout_redirect_uri=/")}>
       Sign Out
     </button>
    </div>
