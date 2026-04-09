@@ -27,13 +27,15 @@ export default function AuthButtons() {
   useEffect(() => {
     if (!user) return;
 
+    const currentUser = user;
+
     async function saveUserToDb() {
       try {
         await axiosClient.post("/api/users/visit", {
-          user_id: user.userId,
-          email: user.email,
-          name: user.name,
-          provider: user.provider,
+          user_id: currentUser.userId,
+          email: currentUser.email,
+          name: currentUser.name,
+          provider: currentUser.provider,
         });
         console.log("✅ User saved to Cosmos DB");
       } catch (err) {
