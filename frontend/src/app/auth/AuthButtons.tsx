@@ -29,7 +29,12 @@ export default function AuthButtons() {
 
     async function saveUserToDb() {
       try {
-        await axiosClient.post("/api/users/visit");
+        await axiosClient.post("/api/users/visit", {
+          user_id: user.userId,
+          email: user.email,
+          name: user.name,
+          provider: user.provider,
+        });
         console.log("✅ User saved to Cosmos DB");
       } catch (err) {
         console.error("❌ Failed to save user", err);

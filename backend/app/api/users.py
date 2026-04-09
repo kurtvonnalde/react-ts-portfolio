@@ -1,10 +1,18 @@
 from fastapi import APIRouter, HTTPException, Request
 from datetime import datetime, timezone
 from azure.cosmos import exceptions
+from pydantic import BaseModel
+from typing import Optional
 import os
 
 from app.db.cosmos import get_container
 from app.auth.user_context import get_authenticated_user
+
+class UserVisitPayload(BaseModel):
+    user_id: str
+    email: Optional[str] = None
+    name: Optional[str] = None
+    provider: Optional[str] = None
 
 router = APIRouter(prefix="/api/users", tags=["users"])
 USERS_CONTAINER = os.getenv("COSMOS_CONTAINER_USERS", "users")
@@ -16,10 +24,12 @@ def users_container():
     return get_container(USERS_CONTAINER)
 
 @router.post("/visit")
-def visit(request: Request):
+def visit(request: Request, payload: Optional[UserVisitPayload] = None):
     user = get_authenticated_user(request)
     if not user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
+        if payload is None:
+            raise HTTPException(status_code=401, detail="Not authenticated")
+        user = payload.dict()
 
     container = users_container()
     user_id = user["user_id"]
