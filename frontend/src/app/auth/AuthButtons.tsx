@@ -34,7 +34,7 @@ export default function AuthButtons() {
   }
   return (
    <div style={{display: "flex", gap: 12, alignItems: "center"}}>
-    <span>Signed in as <b>{user.email}</b></span>
+    <span>Signed in as <b>{user.name}</b></span>
     <button onClick={() => window.location.assign("/.auth/logout?post_logout_redirect_uri=/")}>
       Sign Out
     </button>
