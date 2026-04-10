@@ -1,59 +1,77 @@
-# backend/app/api/users.py
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Request
 from datetime import datetime, timezone
 from azure.cosmos import exceptions
+from pydantic import BaseModel
+from typing import Optional
 import os
+import logging
 
 from app.db.cosmos import get_container
+from app.auth.user_context import get_authenticated_user
+
+logger = logging.getLogger(__name__)
+
+class UserVisitPayload(BaseModel):
+    user_id: str
+    email: Optional[str] = None
+    name: Optional[str] = None
+    provider: Optional[str] = None
 
 router = APIRouter(prefix="/api/users", tags=["users"])
-
 USERS_CONTAINER = os.getenv("COSMOS_CONTAINER_USERS", "users")
 
-def now_iso():
+def now():
     return datetime.now(timezone.utc).isoformat()
 
-def get_users_container():
-    # ✅ only connects when an endpoint is called
+def users_container():
     return get_container(USERS_CONTAINER)
 
-class VisitPayload(BaseModel):
-    userId: str
-    email: str
-    name: str | None = ""
-    provider: str | None = "google"
-
 @router.post("/visit")
-def visit(payload: VisitPayload):
-    if not payload.userId or not payload.email:
-        raise HTTPException(status_code=400, detail="Missing userId/email")
-
-    container = get_users_container()
-
-    doc_id = payload.userId
-    pk = payload.userId
-
+def visit(request: Request, payload: Optional[UserVisitPayload] = None):
     try:
-        existing = container.read_item(item=doc_id, partition_key=pk)
-        existing["lastLogin"] = now_iso()
-        existing["loginCount"] = int(existing.get("loginCount", 0)) + 1
-        existing["email"] = payload.email
-        existing["name"] = payload.name or existing.get("name", "")
-        existing["provider"] = payload.provider or existing.get("provider", "google")
-        container.replace_item(item=doc_id, body=existing)
-        return {"ok": True, "mode": "updated", "userId": payload.userId}
+        user = get_authenticated_user(request)
+        if not user:
+            if payload is None:
+                logger.warning("No authenticated user and no payload provided")
+                raise HTTPException(status_code=401, detail="Not authenticated")
+            user = payload.dict()
+            logger.info(f"Using payload user: {user}")
+        else:
+            logger.info(f"Using authenticated user: {user}")
 
-    except exceptions.CosmosResourceNotFoundError:
-        doc = {
-            "id": doc_id,
-            "userId": payload.userId,
-            "email": payload.email,
-            "name": payload.name or "",
-            "provider": payload.provider or "google",
-            "firstLogin": now_iso(),
-            "lastLogin": now_iso(),
-            "loginCount": 1,
-        }
-        container.create_item(body=doc)
-        return {"ok": True, "mode": "created", "userId": payload.userId}
+        if not user.get("user_id"):
+            logger.error(f"Missing user_id in user data: {user}")
+            raise HTTPException(status_code=400, detail="Missing user_id")
+
+        container = users_container()
+        user_id = user["user_id"]
+
+        try:
+            existing = container.read_item(user_id, partition_key=user_id)
+            existing["lastLogin"] = now()
+            existing["loginCount"] = existing.get("loginCount", 0) + 1
+            existing["email"] = user.get("email")
+            existing["name"] = user.get("name")
+            container.replace_item(user_id, existing)
+            logger.info(f"Updated user {user_id} in Cosmos DB")
+            return {"status": "updated"}
+
+        except exceptions.CosmosResourceNotFoundError:
+            container.create_item({
+                "id": user_id,
+                "userId": user_id,
+                "email": user.get("email"),
+                "name": user.get("name"),
+                "provider": user.get("provider"),
+                "firstLogin": now(),
+                "lastLogin": now(),
+                "loginCount": 1,
+            })
+            logger.info(f"Created new user {user_id} in Cosmos DB")
+            return {"status": "created"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in visit endpoint: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
