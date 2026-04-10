@@ -21,7 +21,7 @@ export default function Header() {
     <header className="header">
         <div className='header-container'>
             <div className='header-logo'>
-                <h1>Logo</h1>
+                <h1>Kurt v. a.</h1>
             </div>
              <nav className={`header-nav`}>
                 <Link to="/">Home</Link>
