@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import AuthButtons from "../app/auth/AuthButtons";
 import "./Header.css";
 import { useEffect } from "react";
 
