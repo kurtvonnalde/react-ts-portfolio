@@ -135,7 +135,7 @@ export default function Home() {
                   />
                   <div>
                     <h3>SQL</h3>
-                    <p>Intermediate</p>
+                    <p>Experienced</p>
                   </div>
                 </article>
                 <article>
@@ -168,7 +168,7 @@ export default function Home() {
                   />
                   <div>
                     <h3>PowerBI</h3>
-                    <p>Intermediate</p>
+                    <p>Experienced</p>
                   </div>
                 </article>
               </div>
