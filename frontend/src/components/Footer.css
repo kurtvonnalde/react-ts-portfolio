@@ -96,3 +96,22 @@
 .footer-section ul li a:hover::after {
     width: 100%;
 }
+
+@media screen and (max-width: 1400px) {
+}
+@media screen and (max-width: 1200px) {
+}
+
+@media screen and (max-width: 600px) {
+    .footer-content{
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .footer-section h3{
+        justify-content: center;
+    }
+
+}

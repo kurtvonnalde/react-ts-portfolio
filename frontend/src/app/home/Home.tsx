@@ -5,7 +5,7 @@ import {
   FaGithub,
   FaMedal,
   FaSchool,
-  FaEnvelope,
+  
 } from "react-icons/fa";
 import "./Home.css";
 
@@ -261,28 +261,10 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div className="details-container color-container">
-              <div className="article-container">
-                <img
-                  src="./assets/project-3.png"
-                  alt="Project 3"
-                  className="project-img"
-                />
-              </div>
-              <h2 className="experience-sub-title project-title">
-                Project Three
-              </h2>
-              <div className="btn-container">
-                <button className="btn btn-color-2 project-btn">Github</button>
-                <button className="btn btn-color-2 project-btn">
-                  Live Demo
-                </button>
-              </div>
             </div>
-          </div>
         </div>
       </section>
-      <section id="contact">
+      {/* <section id="contact">
         <p className="section__text__p1">Get in Touch</p>
         <h1 className="title">Contact Me</h1>
         <div className="contact-info-upper-container">
@@ -307,7 +289,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
