@@ -6,8 +6,8 @@ def get_container(name: str):
     key = os.getenv("COSMOS_KEY")
     db_name = os.getenv("COSMOS_DATABASE", "aicopilotdb")
 
-    if not endpoint or not key:
-        raise RuntimeError("Missing COSMOS_ENDPOINT or COSMOS_KEY env vars")
+    if not endpoint or not key or not db_name:
+        raise RuntimeError("Missing COSMOS_ENDPOINT / COSMOS_KEY / COSMOS_DATABASE")
 
     client = CosmosClient(endpoint, credential=key)
     db = client.get_database_client(db_name)
