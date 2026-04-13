@@ -254,3 +254,9 @@ nav {
 .hamburger-icon span:first-child {
   transform: none;
 }
+
+.nav-link.active {
+  color: var(--primary);       /* highlight color */
+  font-weight: bold;           /* make it stand out */
+  border-bottom: 2px solid var(--primary); /* underline effect */
+}

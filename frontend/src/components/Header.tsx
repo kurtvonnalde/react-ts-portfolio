@@ -1,8 +1,20 @@
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import "./Header.css";
 import { useEffect } from "react";
+import type { HeaderList } from "../types/navigation.types";
+
+const navigationItems: { key: HeaderList; label: string; path: string }[] = [
+  { key: "Home", label: "Home", path: "/" },
+  { key: "About me", label: "About me", path: "/about" },
+  { key: "Contact", label: "Contact", path: "/contact" },
+  { key: "Services", label: "Services", path: "/services" },
+];
 
 export default function Header() {
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
+
   useEffect(() => {
     const url = new URL(window.location.href);
 
@@ -31,9 +43,15 @@ export default function Header() {
         <div className="logo">kurt v. a.</div>
         <div>
           <nav className={`header-nav`}>
-            <Link to="/">Home</Link>
-            <Link to="/about">About me</Link>
-            <Link to="/contact">Contact</Link>
+            {navigationItems.map((item) => (
+              <Link
+                key={item.key}
+                to={item.path}
+                className={`nav-link ${isActive(item.path) ? "active" : ""}`}
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
       </nav>
@@ -46,9 +64,15 @@ export default function Header() {
             <span></span>
           </div>
           <div className="menu-links">
-            <Link to="/">Home</Link>
-            <Link to="/about">About me</Link>
-            <Link to="/contact">Contact</Link>
+            {navigationItems.map((item) => (
+              <Link
+                key={item.key}
+                to={item.path}
+                className={`nav-link ${isActive(item.path) ? "active" : ""}`}
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </nav>
