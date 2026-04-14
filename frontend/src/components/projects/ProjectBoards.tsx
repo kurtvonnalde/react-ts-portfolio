@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import type { BoardResponse, StatusColumn, ProjectCard } from "../../types/board";
 import { computeSparseOrder } from "../../utils/order";
 import { moveProject } from "../../api/projectsApi";
+import "./project.css";
 
 function flattenIds(cards: ProjectCard[]) {
   return cards.map(c => c.id);
@@ -31,18 +32,12 @@ function SortableCard({ card }: { card: ProjectCard }) {
   return (
     <div
       ref={setNodeRef}
-      style={{
-        ...style,
-        background: "transparent",
-        padding: 10,
-        borderRadius: 8,
-        border: "1px solid #ddd",
-        cursor: "grab",
-      }}
+      className="sortable-card-container"
+      style={style}
       {...attributes}
       {...listeners}
     >
-      <div style={{ fontWeight: 600 }}>{card.title}</div>
+      <div className="sortable-card-title">{card.title}</div>
       {card.techStack?.length ? (
         <div style={{ fontSize: 12, color: "#666" }}>
           {card.techStack.join(" • ")}
@@ -112,15 +107,15 @@ export default function KanbanBoard({
   onRefresh: () => void;
 }) {
   // Local working copy (so we can optimistic update)
-  const [board, setBoard] = useState(data.board);
+  const [board, setBoard] = useState<Record<string, Record<string, ProjectCard[]>>>(data.board ?? {});
 
   // Update local state when data prop changes
   useEffect(() => {
-    setBoard(data.board);
+    setBoard(data.board ?? {});
   }, [data.board]);
 
   // Keep fixed columns from backend
-  const columns = data.columns;
+  const columns = data.columns ?? [];
 
   // Helper: get list for a lane+column
   function getList(feature: string, col: StatusColumn) {
@@ -147,7 +142,7 @@ export default function KanbanBoard({
     let fromCol: StatusColumn | null = null;
     let activeCard: ProjectCard | null = null;
 
-    for (const feat of Object.keys(board)) {
+    for (const feat of Object.keys(board ?? {})) {
       for (const col of columns) {
         const list = getList(feat, col);
         const found = list.find(x => x.id === activeId);
@@ -171,7 +166,7 @@ export default function KanbanBoard({
     if (overId.includes('-')) {
       // Find which feature-col this droppable id corresponds to
       let found = false;
-      for (const feat of Object.keys(board)) {
+      for (const feat of Object.keys(board ?? {})) {
         for (const col of columns) {
           if (`${feat}-${col}` === overId) {
             toFeature = feat;
