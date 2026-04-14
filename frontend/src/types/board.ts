@@ -1,4 +1,4 @@
-export type StatusColumn = "Planned" | "In Progress" | "Completed" | "On Hold";
+export type StatusColumn = "Planned" | "In-Progress" | "Completed" | "On-Hold";
 
 export type ProjectCard = {
   id: string;

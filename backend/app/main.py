@@ -20,10 +20,17 @@ from app.api.projects import router as projects_router
 
 app = FastAPI(title="AI Backend", version="0.1.0")
 
+# Allow frontend origins from environment, with localhost defaults for development
+frontend_origins = os.getenv("FRONTEND_ORIGINS")
+if frontend_origins:
+    allow_origins = [origin.strip() for origin in frontend_origins.split(",") if origin.strip()]
+else:
+    allow_origins = ["http://localhost:5173", "http://localhost:5174"]
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174"],  # Frontend dev server ports
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
