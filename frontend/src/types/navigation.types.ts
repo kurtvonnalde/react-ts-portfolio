@@ -2,7 +2,7 @@ export type HeaderList =
     | "Home"
     | "About me"
     | "Contact"
-    | "Services";
+    | "Projects";
 
 
 export interface NavigationItem {

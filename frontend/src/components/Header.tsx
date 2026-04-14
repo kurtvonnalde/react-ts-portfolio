@@ -7,7 +7,7 @@ const navigationItems: { key: HeaderList; label: string; path: string }[] = [
   { key: "Home", label: "Home", path: "/" },
   { key: "About me", label: "About me", path: "/about" },
   { key: "Contact", label: "Contact", path: "/contact" },
-  { key: "Services", label: "Services", path: "/services" },
+  { key: "Projects", label: "Projects", path: "/projects" },
 ];
 
 export default function Header() {
