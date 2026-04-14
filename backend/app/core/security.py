@@ -8,3 +8,7 @@ def require_admin(x_admin_key: str | None = Header(default=None)):
     
     if not x_admin_key or x_admin_key != expected:
         raise HTTPException(status_code=401, detail="Unauthorized")
+
+def admin_actor() -> str:
+    return os.getenv("ADMIN_ID", "admin")
+

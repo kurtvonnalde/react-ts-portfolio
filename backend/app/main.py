@@ -1,9 +1,15 @@
 # backend/app/main.py
 from pathlib import Path
 from dotenv import load_dotenv
+import os
 
-ENV_PATH = Path(__file__).resolve().parents[1] / ".env"  # -> backend/.env
-load_dotenv(ENV_PATH)
+# Load .env from the backend directory
+backend_dir = Path(__file__).resolve().parent.parent
+env_path = backend_dir / ".env"
+load_dotenv(env_path)
+
+# Also try loading from current working directory as fallback
+load_dotenv()
 
 from fastapi import FastAPI
 from app.api.roles import router as roles_router
