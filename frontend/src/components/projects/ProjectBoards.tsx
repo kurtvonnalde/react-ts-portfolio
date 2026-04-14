@@ -115,7 +115,8 @@ export default function KanbanBoard({
   }, [data.board]);
 
   // Keep fixed columns and feature lanes from backend
-  const columns = data.columns ?? [];
+  const defaultColumns: StatusColumn[] = ["Planned", "In-Progress", "Completed", "On-Hold"];
+  const columns = data.columns?.length ? data.columns : defaultColumns;
   const features = data.features && data.features.length > 0 ? data.features : ["General"];
 
   // Helper: get list for a lane+column
