@@ -1,0 +1,12 @@
+.sortable-card-container{
+        background: transparent;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        cursor: grab;
+}
+
+.sortable-card-title{
+        font-weight: bold;
+        margin-bottom: 4px;
+}
