@@ -114,8 +114,9 @@ export default function KanbanBoard({
     setBoard(data.board ?? {});
   }, [data.board]);
 
-  // Keep fixed columns from backend
+  // Keep fixed columns and feature lanes from backend
   const columns = data.columns ?? [];
+  const features = data.features && data.features.length > 0 ? data.features : ["General"];
 
   // Helper: get list for a lane+column
   function getList(feature: string, col: StatusColumn) {
@@ -186,7 +187,7 @@ export default function KanbanBoard({
       // overId is a card ID - find its feature and column
       toCol = 'Planned'; // Default fallback
       
-      for (const feat of Object.keys(board)) {
+      for (const feat of features) {
         for (const col of columns) {
           const list = getList(feat, col);
           const found = list.find(x => x.id === overId);
@@ -280,7 +281,7 @@ export default function KanbanBoard({
       onDragStart={(e) => console.log('Drag started:', e.active.id)}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        {Object.keys(board).map((feature) => (
+        {features.map((feature) => (
           <div key={feature} style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
             <h3 style={{ margin: "0 0 12px 0" }}>{feature}</h3>
 
