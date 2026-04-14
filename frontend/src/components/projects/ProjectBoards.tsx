@@ -165,7 +165,7 @@ export default function KanbanBoard({
 
     // Determine target feature and column
     let toFeature: string = '';
-    let toCol: StatusColumn;
+    let toCol: StatusColumn = 'Planned';
 
     // Check if overId is a column droppable (format: "feature-col")
     if (overId.includes('-')) {
