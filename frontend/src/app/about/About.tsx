@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import PortfolioChat from '../../components/PortfolioChat';
 import './About.css';
 
