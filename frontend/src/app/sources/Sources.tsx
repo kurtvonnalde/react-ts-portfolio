@@ -26,7 +26,7 @@ export default function Sources() {
 
   const fetchSources = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/rag/sources');
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/rag/sources`);
       if (!response.ok) throw new Error('Failed to fetch sources');
       
       const data = await response.json();
@@ -43,7 +43,7 @@ export default function Sources() {
     if (!window.confirm('Are you sure you want to delete this source?')) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/rag/sources/${docId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/rag/sources/${docId}`, {
         method: 'DELETE'
       });
       
@@ -100,7 +100,7 @@ export default function Sources() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/api/rag/upload', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/rag/upload`, {
         method: 'POST',
         body: formData
       });
