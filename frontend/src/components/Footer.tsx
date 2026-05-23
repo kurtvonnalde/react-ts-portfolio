@@ -60,6 +60,14 @@ export default function Footer() {
                         <FaBook style={{marginRight: '0.5rem', color: 'var(--primary)'}} />
                         Resources
                     </h3>
+                     <ul>
+                        <li>
+                            <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+                                <FaReact style={{marginRight: '0.5rem', color: 'var(--primary)'}} />
+                                React
+                            </a>
+                           </li>
+                    </ul>
                 </div>
                 <div className="footer-section">
                     <h3>
