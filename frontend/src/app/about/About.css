@@ -7,7 +7,41 @@
   background: #0d0d0d;
   overflow: hidden;
   position: relative;
+  align-items: center;
+  justify-content: center;
 }
+
+.portfolio-chat {
+  width: 80%;
+  height: 100%;
+  max-width: 1200px;
+}
+
+/* Hide footer when on about page */
+footer {
+  display: none !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 1024px) {
+  .portfolio-chat {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-page {
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .portfolio-chat {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
 
 
 
