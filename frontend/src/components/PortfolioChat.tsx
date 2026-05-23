@@ -45,7 +45,7 @@ export const PortfolioChat: React.FC<PortfolioChatProps> = ({ initialMessages = 
 
     try {
       // Call the RAG API
-      const response = await fetch('http://localhost:8000/api/rag/query', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/rag/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
