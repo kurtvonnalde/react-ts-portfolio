@@ -64,8 +64,9 @@ export default function Footer() {
                         <li>
                             <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
                                 <FaReact style={{marginRight: '0.5rem', color: 'var(--primary)'}} />
-                                Data Source
+                                React
                             </a>
+                           </li>
                     </ul>
                 </div>
                 <div className="footer-section">
