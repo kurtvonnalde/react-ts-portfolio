@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Sources.css';
 
 interface Source {
@@ -9,22 +10,41 @@ interface Source {
 }
 
 const UPLOAD_KEY = 'myq36N&N99MsO'; // Change this to your desired key
+const PAGE_ACCESS_STORAGE_KEY = 'sources_access_granted';
 
 export default function Sources() {
+  const navigate = useNavigate();
   const [sources, setSources] = useState<Source[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showKeyModal, setShowKeyModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'page' | 'upload' | null>(null);
+  const [pageAccessGranted, setPageAccessGranted] = useState(false);
   const [keyInput, setKeyInput] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchSources();
+    const hasAccess = localStorage.getItem(PAGE_ACCESS_STORAGE_KEY) === 'true';
+    if (hasAccess) {
+      setPageAccessGranted(true);
+      setShowKeyModal(false);
+      setAuthMode(null);
+    } else {
+      setShowKeyModal(true);
+      setAuthMode('page');
+    }
   }, []);
 
+  useEffect(() => {
+    if (pageAccessGranted) {
+      fetchSources();
+    }
+  }, [pageAccessGranted]);
+
   const fetchSources = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/rag/sources`);
       if (!response.ok) throw new Error('Failed to fetch sources');
@@ -58,13 +78,14 @@ export default function Sources() {
   };
 
   const handleUploadClick = () => {
+    setAuthMode('upload');
     setShowKeyModal(true);
     setKeyInput('');
   };
 
   const handleKeySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (keyInput !== UPLOAD_KEY) {
       setError('❌ Incorrect security key');
       setKeyInput('');
@@ -72,8 +93,27 @@ export default function Sources() {
       return;
     }
 
+    setKeyInput('');
+
+    if (authMode === 'page') {
+      localStorage.setItem(PAGE_ACCESS_STORAGE_KEY, 'true');
+      setPageAccessGranted(true);
+      setShowKeyModal(false);
+      setAuthMode(null);
+      return;
+    }
+
     setShowKeyModal(false);
     fileInputRef.current?.click();
+  };
+
+  const handleCancelAuth = () => {
+    if (authMode === 'page') {
+      navigate('/');
+      return;
+    }
+
+    setShowKeyModal(false);
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,61 +179,70 @@ export default function Sources() {
 
   return (
     <div className="sources-page">
-      <div className="sources-container">
-        <div className="sources-header">
-          <div className="header-top">
-            <div>
-              <h1>Indexed Sources</h1>
-              <p>Documents that your AI Assistant is trained on</p>
+      {pageAccessGranted ? (
+        <div className="sources-container">
+          <div className="sources-header">
+            <div className="header-top">
+              <div>
+                <h1>Indexed Sources</h1>
+                <p>Documents that your AI Assistant is trained on</p>
+              </div>
+              <button 
+                className="upload-btn"
+                onClick={handleUploadClick}
+                disabled={uploading}
+              >
+                {uploading ? '⏳ Uploading...' : '📤 Upload Document'}
+              </button>
             </div>
-            <button 
-              className="upload-btn"
-              onClick={handleUploadClick}
-              disabled={uploading}
-            >
-              {uploading ? '⏳ Uploading...' : '📤 Upload Document'}
-            </button>
+          </div>
+
+          {uploadMessage && <div className="success-message">{uploadMessage}</div>}
+          {loading && <div className="loading">Loading sources...</div>}
+          {error && <div className="error">{error}</div>}
+
+          {!loading && sources.length === 0 && (
+            <div className="empty-state">
+              <p>No sources indexed yet</p>
+              <p>Upload documents to get started</p>
+            </div>
+          )}
+
+          {!loading && sources.length > 0 && (
+            <div className="sources-grid">
+              {sources.map((source) => (
+                <div key={source.id} className="source-card">
+                  <div className="source-header">
+                    <h3>{source.title}</h3>
+                    <span 
+                      className="source-category"
+                      style={{ backgroundColor: getCategoryColor(source.category) }}
+                    >
+                      {source.category}
+                    </span>
+                  </div>
+                  <p className="source-preview">{source.content_preview}</p>
+                  <div className="source-actions">
+                    <button 
+                      className="delete-btn"
+                      onClick={() => handleDeleteSource(source.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="sources-blocked">
+          <div>
+            <h2>Secure Data Source Access</h2>
+            <p>Enter your security key to unlock the Data Sources page.</p>
           </div>
         </div>
-
-        {uploadMessage && <div className="success-message">{uploadMessage}</div>}
-        {loading && <div className="loading">Loading sources...</div>}
-        {error && <div className="error">{error}</div>}
-
-        {!loading && sources.length === 0 && (
-          <div className="empty-state">
-            <p>No sources indexed yet</p>
-            <p>Upload documents to get started</p>
-          </div>
-        )}
-
-        {!loading && sources.length > 0 && (
-          <div className="sources-grid">
-            {sources.map((source) => (
-              <div key={source.id} className="source-card">
-                <div className="source-header">
-                  <h3>{source.title}</h3>
-                  <span 
-                    className="source-category"
-                    style={{ backgroundColor: getCategoryColor(source.category) }}
-                  >
-                    {source.category}
-                  </span>
-                </div>
-                <p className="source-preview">{source.content_preview}</p>
-                <div className="source-actions">
-                  <button 
-                    className="delete-btn"
-                    onClick={() => handleDeleteSource(source.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Hidden file input */}
       <input
@@ -206,10 +255,14 @@ export default function Sources() {
 
       {/* Security Key Modal */}
       {showKeyModal && (
-        <div className="modal-overlay" onClick={() => setShowKeyModal(false)}>
+        <div className="modal-overlay" onClick={() => authMode !== 'page' && setShowKeyModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>🔐 Enter Security Key</h2>
-            <p>Please enter your security key to upload documents</p>
+            <p>
+              {authMode === 'page'
+                ? 'Please enter your security key to access the Data Sources page.'
+                : 'Please enter your security key to upload documents.'}
+            </p>
             <form onSubmit={handleKeySubmit}>
               <input
                 type="password"
@@ -222,15 +275,15 @@ export default function Sources() {
                 <button 
                   type="button" 
                   className="modal-cancel"
-                  onClick={() => setShowKeyModal(false)}
+                  onClick={handleCancelAuth}
                 >
-                  Cancel
+                  {authMode === 'page' ? 'Go Back' : 'Cancel'}
                 </button>
                 <button 
                   type="submit" 
                   className="modal-submit"
                 >
-                  Verify
+                  {authMode === 'page' ? 'Unlock' : 'Verify'}
                 </button>
               </div>
             </form>

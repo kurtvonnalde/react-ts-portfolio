@@ -17,11 +17,6 @@
   max-width: 1200px;
 }
 
-/* Hide footer when on about page */
-footer {
-  display: none !important;
-}
-
 /* Mobile responsiveness */
 @media (max-width: 1024px) {
   .portfolio-chat {

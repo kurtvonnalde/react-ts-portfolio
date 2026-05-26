@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {FaCode, FaGithub, FaBook, FaLink, FaReact, FaLaptopCode, FaUserFriends, FaLinkedin, FaFacebook} from "react-icons/fa";
 import "./Footer.css"
 
@@ -58,15 +59,15 @@ export default function Footer() {
                 <div className="footer-section">
                     <h3>
                         <FaBook style={{marginRight: '0.5rem', color: 'var(--primary)'}} />
-                        Resources
+                        Data Sources
                     </h3>
-                     <ul>
+                    <ul>
                         <li>
-                            <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+                            <Link to="/sources">
                                 <FaReact style={{marginRight: '0.5rem', color: 'var(--primary)'}} />
-                                React
-                            </a>
-                           </li>
+                                Sources Page
+                            </Link>
+                        </li>
                     </ul>
                 </div>
                 <div className="footer-section">
