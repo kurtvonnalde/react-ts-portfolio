@@ -11,7 +11,7 @@ import "./Home.css";
 
 export default function Home() {
   return (
-    <div>
+    <div className="home-page">
       <section id="profile">
         <div className="section__pic-container profile">
           <img src="/images/profile.jpg" alt="John Doe profile picture" />

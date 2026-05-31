@@ -1,6 +1,7 @@
 export type HeaderList = 
     | "Home"
-    | "About me"
+    | "Krawl"
+    | "CV"
     | "Contact"
     | "Projects";
 

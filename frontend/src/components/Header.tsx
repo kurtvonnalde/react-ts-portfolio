@@ -5,7 +5,8 @@ import type { HeaderList } from "../types/navigation.types";
 
 const navigationItems: { key: HeaderList; label: string; path: string }[] = [
   { key: "Home", label: "Home", path: "/" },
-  { key: "About me", label: "About me", path: "/about" },
+  { key: "Krawl", label: "Krawl", path: "/about" },
+  { key: "CV", label: "CV", path: "/cv" },
 ];
 
 export default function Header() {

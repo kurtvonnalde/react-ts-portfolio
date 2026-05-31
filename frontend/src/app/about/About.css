@@ -1,26 +1,28 @@
 /* About Page - Greyish Black Chat Layout */
 .about-page {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: #0d0d0d;
   overflow: hidden;
   position: relative;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 .portfolio-chat {
-  width: 80%;
-  height: 100%;
-  max-width: 1200px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  max-width: none;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 1024px) {
   .portfolio-chat {
-    width: 90%;
+    width: 100%;
   }
 }
 

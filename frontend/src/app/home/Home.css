@@ -5,7 +5,7 @@
 
 /* SECTIONS */
 
-section {
+.home-page section {
   padding-top: 4vh;
   height: 96vh;
   margin: 0 10rem;
@@ -209,14 +209,14 @@ section {
   justify-content: space-around;
 }
 
-article {
+.home-page article {
   display: flex;
   width: 10rem;
   justify-content: space-around;
   gap: 0.5rem;
 }
 
-article .icon {
+.home-page article .icon {
   cursor: default;
 }
 
@@ -323,11 +323,11 @@ article .icon {
   .arrow {
     display: none;
   }
-  section,
+  .home-page section,
   .section-container {
     height: fit-content;
   }
-  section {
+  .home-page section {
     margin: 0 5%;
   }
   .section__pic-container {
@@ -350,7 +350,7 @@ article .icon {
     height: 83vh;
     margin-bottom: 0;
   }
-  article {
+  .home-page article {
     font-size: 1rem;
   }
   .about-containers,

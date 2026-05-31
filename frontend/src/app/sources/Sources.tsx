@@ -18,7 +18,7 @@ export default function Sources() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showKeyModal, setShowKeyModal] = useState(false);
-  const [authMode, setAuthMode] = useState<'page' | 'upload' | null>(null);
+  const [authMode, setAuthMode] = useState<'page' | null>(null);
   const [pageAccessGranted, setPageAccessGranted] = useState(false);
   const [keyInput, setKeyInput] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -78,9 +78,7 @@ export default function Sources() {
   };
 
   const handleUploadClick = () => {
-    setAuthMode('upload');
-    setShowKeyModal(true);
-    setKeyInput('');
+    fileInputRef.current?.click();
   };
 
   const handleKeySubmit = async (e: React.FormEvent) => {
@@ -100,20 +98,13 @@ export default function Sources() {
       setPageAccessGranted(true);
       setShowKeyModal(false);
       setAuthMode(null);
-      return;
     }
-
-    setShowKeyModal(false);
-    fileInputRef.current?.click();
   };
 
   const handleCancelAuth = () => {
     if (authMode === 'page') {
       navigate('/');
-      return;
     }
-
-    setShowKeyModal(false);
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -259,9 +250,7 @@ export default function Sources() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>🔐 Enter Security Key</h2>
             <p>
-              {authMode === 'page'
-                ? 'Please enter your security key to access the Data Sources page.'
-                : 'Please enter your security key to upload documents.'}
+              Please enter your security key to access the Data Sources page.
             </p>
             <form onSubmit={handleKeySubmit}>
               <input
@@ -277,13 +266,13 @@ export default function Sources() {
                   className="modal-cancel"
                   onClick={handleCancelAuth}
                 >
-                  {authMode === 'page' ? 'Go Back' : 'Cancel'}
+                  Go Back
                 </button>
                 <button 
                   type="submit" 
                   className="modal-submit"
                 >
-                  {authMode === 'page' ? 'Unlock' : 'Verify'}
+                  Unlock
                 </button>
               </div>
             </form>
